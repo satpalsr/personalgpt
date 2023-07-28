@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@huggingface/hub':
+    specifier: ^0.8.4
+    version: 0.8.4
   '@huggingface/inference':
     specifier: ^2.6.1
     version: 2.6.1
@@ -274,6 +277,13 @@ packages:
       '@floating-ui/dom': 1.2.9
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@huggingface/hub@0.8.4:
+    resolution: {integrity: sha512-171USyFhbNdZy/mfWTQYRQia9czjfkcV/9TA/QoCVD702659dmIfvnYQMmLuDnTDSVSMZE8xzkZaA9qX0c4ioQ==}
+    engines: {node: '>=18'}
+    dependencies:
+      hash-wasm: 4.9.0
     dev: false
 
   /@huggingface/inference@2.6.1:
@@ -2809,6 +2819,10 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
+
+  /hash-wasm@4.9.0:
+    resolution: {integrity: sha512-7SW7ejyfnRxuOc7ptQHSf4LDoZaWOivfzqw+5rpcQku0nHfmicPKE51ra9BiRLAmT8+gGLestr1XroUkqdjL6w==}
+    dev: false
 
   /hast-util-parse-selector@2.2.5:
     resolution: {integrity: sha512-7j6mrk/qqkSehsM92wQjdIgWM2/BW61u/53G6xmC8i1OmEdKLHbk419QKQUjz6LglWsfqoiHmyMRkP1BGjecNQ==}

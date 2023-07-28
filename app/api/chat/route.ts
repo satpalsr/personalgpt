@@ -1,8 +1,9 @@
 // import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse, HuggingFaceStream } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
-import { HfInference } from '@huggingface/inference'
-import { experimental_buildOpenAssistantPrompt } from 'ai/prompts'
+import { HfInference, HfInferenceEndpoint } from '@huggingface/inference'
+import { experimental_buildOpenAssistantPrompt, experimental_buildLlama2Prompt } from 'ai/prompts'
+import { whoAmI } from "@huggingface/hub";
 
 import { nanoid } from '@/lib/utils'
 import { cp } from 'fs'
@@ -19,40 +20,47 @@ export async function POST(req: Request) {
 
     // selectedModel = selectedModel.substring('HF/'.length);
     selectedModel = selectedModel.substring(3);
+
+    let messagesWrapper = experimental_buildOpenAssistantPrompt
+    let Hf;
+
+    if (selectedModel.includes('llama')) {
+      
+      messagesWrapper = experimental_buildLlama2Prompt
+      const endpointUrl = `https://api-inference.huggingface.co/models/${selectedModel}`
+      Hf = new HfInferenceEndpoint(endpointUrl, process.env.HUGGINGFACE_API_KEY)
+
+    } else {
+
     
-    const Hf = new HfInference(apiKey)
+      Hf = new HfInference(apiKey)
 
-    try {
+      try {
 
-    await Hf.fillMask({
-      model: 'bert-base-uncased',
-      inputs: '[MASK] world!'
-    })
-
-    } catch (error: any) {  
-      let error_text = error.toString()
-      if (error_text.includes('Authorization header is correct, but the token seems invalid')) {
-        error_text = 'Invalid api key'
+        const info = await whoAmI({credentials: {accessToken: process.env.HUGGINGFACE_TOKEN!}});
+      } catch (error) {
+        return new Response('Invalid HF Token',{ status: 401, statusText: 'Invalid HF Token',});
       }
-      return new Response(`${error_text}`, {status: 400, statusText: `${error_text}`})
+
     }
 
 
-    const response = await Hf.textGenerationStream({
-      model: selectedModel,
-      inputs: experimental_buildOpenAssistantPrompt(messages),
-      parameters: {
-        max_new_tokens: 200,
-        // @ts-ignore (this is a valid parameter specifically in OpenAssistant models)
-        typical_p: 0.2,
-        repetition_penalty: 1,
-        truncate: 1000,
-        return_full_text: false
-      }
-    })
 
-    const stream = HuggingFaceStream(response)
-    return new StreamingTextResponse(stream)
+  const response = await Hf.textGenerationStream({
+    model: selectedModel,
+    inputs: messagesWrapper(messages),
+    parameters: {
+      max_new_tokens: 200,
+      // @ts-ignore (this is a valid parameter specifically in OpenAssistant models)
+      typical_p: 0.2,
+      repetition_penalty: 1,
+      truncate: 1000,
+      return_full_text: false
+    }
+  })
+
+  const stream = HuggingFaceStream(response)
+  return new StreamingTextResponse(stream)
 
   }
 
