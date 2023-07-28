@@ -23,8 +23,11 @@ export async function POST(req: Request) {
 
     let messagesWrapper = experimental_buildOpenAssistantPrompt
     let Hf;
+    let max_new_tokens = 1000
 
     if (selectedModel.includes('llama')) {
+
+      max_new_tokens = 4000
       
       messagesWrapper = experimental_buildLlama2Prompt
       const endpointUrl = `https://api-inference.huggingface.co/models/${selectedModel}`
@@ -32,13 +35,15 @@ export async function POST(req: Request) {
 
     } else {
 
+      console.log('apiKey', apiKey)
     
       Hf = new HfInference(apiKey)
 
       try {
 
-        const info = await whoAmI({credentials: {accessToken: process.env.HUGGINGFACE_TOKEN!}});
+        const info = await whoAmI({credentials: {accessToken: apiKey}});
       } catch (error) {
+        console.log(error)
         return new Response('Invalid HF Token',{ status: 401, statusText: 'Invalid HF Token',});
       }
 
@@ -50,7 +55,7 @@ export async function POST(req: Request) {
     model: selectedModel,
     inputs: messagesWrapper(messages),
     parameters: {
-      // max_new_tokens: 200,
+      max_new_tokens: max_new_tokens,
       // @ts-ignore (this is a valid parameter specifically in OpenAssistant models)
       typical_p: 0.2,
       repetition_penalty: 1,
