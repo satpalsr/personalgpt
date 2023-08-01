@@ -39,9 +39,15 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   }
 
   const router = useRouter()
+
+  let apiEndpoint = '/api/chat'
+  if (youtubeSearch) {
+    apiEndpoint  = '/api/langchain'
+  }
   
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
+      api: apiEndpoint,
       initialMessages,
       id,
       body: {
