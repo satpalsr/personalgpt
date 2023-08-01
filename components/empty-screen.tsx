@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { UseChatHelpers } from 'ai/react'
+// import { UseChatHelpers } from 'ai/react'
+import { UseChatHelpers } from '@/components/use-chat'
 
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from '@/components/external-link'
@@ -47,10 +48,12 @@ interface EmptyScreenProps {
   hfToken: string;
   setHfToken: (value: string) => void;
   models: string[];
+  youtubeSearch: boolean;
+  setYoutubeSearch: (value: boolean) => void;
 }
 
 
-export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog, selectedModel, setSelectedModel, openaiKey, setOpenaiKey, hfToken, setHfToken, models }: EmptyScreenProps) {
+export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog, selectedModel, setSelectedModel, openaiKey, setOpenaiKey, hfToken, setHfToken, models, youtubeSearch, setYoutubeSearch }: EmptyScreenProps) {
 
   const router = useRouter()
 
@@ -77,6 +80,11 @@ export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog,
     setSelectedModel(selectedValue);
   };
 
+  const handleToggleChange = (event: any) => {
+    setYoutubeSearch(event.target.checked);
+  };
+
+
   return (
     <>
 
@@ -84,7 +92,7 @@ export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog,
           <div className="rounded-lg border bg-background p-8">
             <h1 className="mb-2 text-lg font-semibold">Welcome to PersonalGPT!</h1>
             <p className="mb-2 leading-normal text-muted-foreground">
-              This is an <a className='underline' href="https://github.com/satpalsr/personalgpt">open source</a> AI chatbot app that runs locally in your browser.
+              This is an <a className='underline' target='_blank' href="https://github.com/satpalsr/personalgpt">open source</a> AI chatbot app that runs locally in your browser.
             </p>
             <p className="leading-normal text-muted-foreground">
               You can start a conversation here or try the following examples:
@@ -108,6 +116,18 @@ export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog,
                 Selected Model: {selectedModel}
               </Button>
             </div>
+
+            <div className="flex justify-center mt-4">
+            <span className="mr-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Youtube Search
+              </span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" defaultValue="" className="sr-only peer" checked={youtubeSearch} onChange={handleToggleChange}/>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
+              </label>
+            </div>
+
+            
           </div>
         </div>
 

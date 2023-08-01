@@ -1,6 +1,7 @@
 'use client'
 
-import { useChat, type Message } from 'ai/react'
+// import { useChat, type Message } from 'ai/react'
+import { useChat, type Message } from '@/components/use-chat'
 
 import { cn } from '@/lib/utils'
 import { ChatList } from '@/components/chat-list'
@@ -10,6 +11,8 @@ import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
+
+import { useRouter } from 'next/navigation'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -24,6 +27,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   const [selectedModel, setSelectedModel] = useLocalStorage<string>('selectedModel', models[0]);
   const [openaiKey, setOpenaiKey] = useLocalStorage<string>('openaiKey', '');
   const [hfToken, setHfToken] = useLocalStorage<string>('hfToken', '');
+  const [youtubeSearch, setYoutubeSearch] = useLocalStorage<boolean>('youtubeSearch', false);
 
   let apiKey;
 
@@ -34,6 +38,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     apiKey = hfToken;
   }
 
+  const router = useRouter()
+  
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
       initialMessages,
@@ -41,7 +47,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       body: {
         id,
         apiKey,
-        selectedModel
+        selectedModel,
+        youtubeSearch
       },
       onResponse(response) {
         if (response.status != 200) {
@@ -55,12 +62,16 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       }
     })
 
+  if (messages.length == 1) {
+    router.push(`/chat/${id}`)
+  }
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
         {messages.length ? (
           <>
-            <ChatList messages={messages} />
+            <ChatList messages={messages} sources={id} youtubeSearch={youtubeSearch}/>
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
         ) : (
@@ -75,6 +86,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           hfToken = {hfToken}
           setHfToken={setHfToken}
           models = {models}
+          youtubeSearch = {youtubeSearch}
+          setYoutubeSearch = {setYoutubeSearch}
           />
         )}
       </div>

@@ -3,7 +3,9 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.index:app --reload",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run fastapi-dev\"",
+    "next-dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -31,13 +33,15 @@
     "ai": "^2.1.26",
     "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
+    "concurrently": "^8.2.0",
     "focus-trap-react": "^10.1.1",
+    "langchain": "^0.0.119",
     "nanoid": "^4.0.2",
     "next": "13.4.7-canary.1",
     "next-auth": "0.0.0-manual.83c4ebd1",
     "next-template": "link:",
     "next-themes": "^0.2.1",
-    "openai-edge": "^0.5.1",
+    "openai-edge": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -47,7 +51,8 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-textarea-autosize": "^8.4.1",
     "remark-gfm": "^3.0.1",
-    "remark-math": "^5.1.1"
+    "remark-math": "^5.1.1",
+    "swr": "^2.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

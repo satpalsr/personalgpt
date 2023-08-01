@@ -1,4 +1,5 @@
-import { UseChatHelpers } from 'ai/react'
+// import { UseChatHelpers } from 'ai/react'
+import { UseChatHelpers } from '@/components/use-chat'
 import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
 
