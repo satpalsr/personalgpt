@@ -198,3 +198,54 @@ export function deleteChat(id: string) {
 //     return null;
 // }
 
+export function saveContextText(id: string, contextText: string | null) {
+    return new Promise((resolve, reject) => {
+      if (!contextText) return resolve(undefined)
+      try {
+        const key = `contextText:${id}`
+        localStorage.setItem(key, contextText);
+        resolve(undefined);
+      } catch (error) {
+        reject(error);
+      }
+    });
+}
+
+export function getContextText(id: string): Promise<string | null> {
+    return new Promise((resolve, reject) => {
+      try {
+        const key = `contextText:${id}`
+        const contextText: string | null = localStorage.getItem(key);
+        resolve(contextText);
+      } catch (error) {
+        reject(error);
+      }
+    });
+}
+
+export function saveSources(id: string, Sources: any) {
+    return new Promise((resolve, reject) => {
+      try {
+        const key = `Sources:${id}`
+        const sourcesJSON = JSON.stringify(Sources);
+        localStorage.setItem(key, sourcesJSON);
+        resolve(undefined);
+      } catch (error) {
+        reject(error);
+      }
+    });
+}
+
+export function getSources(id: string): Promise<any | null> {
+    return new Promise((resolve, reject) => {
+        try {
+            const key = `Sources:${id}`
+            const sourcesJSON: string | null = localStorage.getItem(key);
+            const Sources: any = sourcesJSON ? JSON.parse(sourcesJSON) : null;
+            resolve(Sources);
+        } catch (error) {
+            reject(error);
+        }
+        }
+    );
+}

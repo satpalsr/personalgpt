@@ -1,5 +1,6 @@
 'use client'
-import { type UseChatHelpers } from 'ai/react'
+// import { type UseChatHelpers } from 'ai/react'
+import { type UseChatHelpers } from '@/components/use-chat'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
@@ -34,7 +35,7 @@ export function ChatPanel({
   reload,
   input,
   setInput,
-  messages
+  messages,
 }: ChatPanelProps) {
 
   const router = useRouter()
@@ -90,7 +91,7 @@ export function ChatPanel({
               } catch (error: any) {
                 // Handle any errors that might occur during the append operation.
                 // toast.error(`Error: Check if your API key is valid. ${error.statusText}`)
-                console.log(`Error is : ${error}`)
+                // console.log(`Error is : ${error}`)
               }
             }}
             input={input}
