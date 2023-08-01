@@ -25,41 +25,23 @@ export async function POST(req: Request) {
         thumbnail: item.snippet.thumbnails.default.url
     })); 
 
-    const response2 = await fetch('https://www.personalgpt.dev:8000/api/youtubetranscript',
+    console.log(`videos ${JSON.stringify(videos)}`)
+
+    const response2 = await fetch(process.env.YOUTUBE_TRANSCRIPT_ENDPOINT!,
         {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                "videos": videos,
-            }),
+            body: JSON.stringify({"videos": videos}) 
         }
     );
 
-    // const res2 = await response2.json();
-    // const videoText = await res2.body
-
     const Res2 = await response2.json();
-    const body = JSON.parse(Res2.body); // Decode the "body" property
-    videos = body.videos
+    videos = Res2['videos']
 
-
-    // Add videoText to videos
-    // videos = videos.map((video: any) => ({
-    //     ...video,
-    //     videoText: videoText,
-    // }));
-
-    // console.log(`videos in youtube ${JSON.stringify(videos)}`)
-
-    // const videoText = 'The name is John.';
 
     return new Response(JSON.stringify(videos), {
         headers: { 'content-type': 'text/plain;charset=UTF-8' },
     });
-
-    // return new Response(JSON.stringify(videos), {
-    //     headers: { 'content-type': 'application/json;charset=UTF-8' },
-    // });
 }
