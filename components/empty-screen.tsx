@@ -127,7 +127,7 @@ export function EmptyScreen({ setInput, selectmodeldialog, setSelectModelDialog,
               </label>
             </div> */}
           <div className="flex justify-center mt-4">
-            <a href="http://weeklyai.net/" target="_blank" className="bg-gray-800 text-white pt-2 pl-2 pr-2 pb-2 mr-3 text-sm font-medium text-gray-900 dark:text-gray-300 rounded-md">
+            <a href="http://weeklyai.net/" target="_blank" className="bg-blue-500 text-white pt-2 pl-2 pr-2 pb-2 mr-3 text-sm font-medium dark:text-gray-300 rounded-md">
               Get Weekly AI updates
             </a>
           </div>
