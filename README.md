@@ -16,3 +16,5 @@ For any issues, bugs & contributions, [Join PersonalGPT on Discord](https://disc
 3. Start application: `pnpm dev`
 
 Your app should now be running on [localhost:3000](http://localhost:3000/).
+
+![personalgpt](https://github.com/satpalsr/personalgpt/assets/39311993/f05ab4a7-13da-4af7-ad1c-3c0638d38b83)
